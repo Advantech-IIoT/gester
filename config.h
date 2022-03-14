@@ -1,7 +1,7 @@
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
         /*path to the input event, need to be part of input group in order to read*/
-        char devname[] = "/dev/input/by-id/usb-Wacom_Co._Ltd._Pen_and_multitouch_sensor-event-if00";
+        char devname[] = "/dev/input/event2";
 	//char devname[] = "/dev/input/event12";
         /*path to accelerometer data*/
         std::string accelpath = "/sys/bus/iio/devices/"; //in there the program looks for a folder named iio:device0 or 1
@@ -25,34 +25,34 @@
         int offsetright = 10;
         /*an array of commands to use within the program*/
         char* commands[] = {
-            "svkbd &", /*1 finger from bottom*/
-            "dmenu_run &", /*1 finger from top*/
+            "", /*1 finger from bottom*/
+            "", /*1 finger from top*/
             "", /*1 finger from right*/
-            "stabbed &", /*1 finger from left*/
-            "pkill svkbd", /*1 finger towards bottom*/
+            "", /*1 finger from left*/
+            "", /*1 finger towards bottom*/
             "", /*1 finger towards top*/
             "", /*1 finger towards right*/
             "", /*1 finger towards left*/
-			"", /*2 finger swipe from bottom*/
-            "", /*2 finger swipe from top*/
+            "ps aux | grep settings | awk '{print $2}' | xargs kill -9", /*2 finger swipe from bottom*/
+            "/usr/bin/start_settings.sh &", /*2 finger swipe from top*/
             "", /*2 finger swipe from right*/
             "", /*2 finger swipe from left*/
-            "", /*2 finger swipe down*/
-            "", /*2 finger swipe up*/
-            "xdotool key super+2", /*2 finger swipe right*/
-            "xdotool key super+1", /*2 finger swipe left*/
-            "/home/christopher/bin/changevolume ", /*2 finger rotation left*/
-            "/home/christopher/bin/changevolume ", /*2finger rotation right*/
+            "ps aux | grep settings | awk '{print $2}' | xargs kill -9", /*2 finger swipe down*/
+            "/usr/bin/start_settings.sh &", /*2 finger swipe up*/
+            "", /*2 finger swipe right*/
+            "", /*2 finger swipe left*/
+            "", /*2 finger rotation left*/
+            "", /*2finger rotation right*/
             "", /*3 finger swipe from bottom*/
             "", /*3 finger swipe from top*/
             "", /*3 finger swipe from right*/
             "", /*3 finger swipe from left*/
             "", /*3 finger swipe down*/
             "", /*3 finger swipe up*/
-            "xdotool key super+shift+2", /*3 finger swipe right*/
-            "xdotool key super+shift+1", /*3 finger swipe left*/
-            "/home/christopher/bin/changebrightness ", /*3 finger rotation left*/
-            "/home/christopher/bin/changebrightness ", /*3 finger rotation right*/
+            "", /*3 finger swipe right*/
+            "", /*3 finger swipe left*/
+            "", /*3 finger rotation left*/
+            "", /*3 finger rotation right*/
             "", /*4 finger swipe from bottom*/
             "", /*4 finger swipe from top*/
             "", /*4 finger swipe from right*/
@@ -71,7 +71,7 @@
             "", /*5 finger swipe up*/
             "", /*5 finger swipe right*/
             "", /*5 finger swipe left*/
-            "xdotool key super+shift+q ", /*5 finger rotation left*/
+            "", /*5 finger rotation left*/
             "", /*5 finger rotation right*/
         };
 
