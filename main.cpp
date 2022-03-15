@@ -37,18 +37,18 @@ int main(){
         int xrotmax = ymax;
         /*get info from accelerometer script*/
         double accelscaling = 0.000009806;
-        std::string xaccelpathfull = accelpath + "iio:device0/" + xrawdata;
-        std::string yaccelpathfull = accelpath + "iio:device0/" + yrawdata;
-        std::ifstream xacceldata;
-        std::ifstream yacceldata;
-        xacceldata.open(xaccelpathfull);
-        yacceldata.open(yaccelpathfull);
-        if(xacceldata.good() != true){
-            xaccelpathfull = accelpath + "iio:device1/" + xrawdata;
-            yaccelpathfull = accelpath + "iio:device1/" + yrawdata;
-            xacceldata.open(xaccelpathfull);
-            yacceldata.open(yaccelpathfull);
-        }
+        // std::string xaccelpathfull = accelpath + "iio:device0/" + xrawdata;
+        // std::string yaccelpathfull = accelpath + "iio:device0/" + yrawdata;
+        // std::ifstream xacceldata;
+        // std::ifstream yacceldata;
+        // xacceldata.open(xaccelpathfull);
+        // yacceldata.open(yaccelpathfull);
+        // if(xacceldata.good() != true){
+        //     xaccelpathfull = accelpath + "iio:device1/" + xrawdata;
+        //     yaccelpathfull = accelpath + "iio:device1/" + yrawdata;
+        //     xacceldata.open(xaccelpathfull);
+        //     yacceldata.open(yaccelpathfull);
+        // }
         int accelxraw = 0 ;
         int accelyraw = 0 ;
         double accelx = 0 ;
@@ -75,10 +75,10 @@ int main(){
             signal(SIGUSR1, my_handler);
             if(sigusrsig == 1){
                 sigusrsig = 0;
-                xacceldata.clear();
-                xacceldata.seekg(0);
-                yacceldata.clear();
-                yacceldata.seekg(0);
+                // xacceldata.clear();
+                // xacceldata.seekg(0);
+                // yacceldata.clear();
+                // yacceldata.seekg(0);
             }
             read(device,&ev, sizeof(ev));
                 //if(ev.type == 1 && ev.value == 1){
@@ -92,8 +92,8 @@ int main(){
                 finger = ev.value;
             }
             /*here we need to read the accelerometers and then assign data to the arrays according to the orientation*/
-            xacceldata >> accelxraw;
-            yacceldata >> accelyraw;
+            // xacceldata >> accelxraw;
+            // yacceldata >> accelyraw;
             //printf("accelxraw: %i accelyraw: %i ",accelxraw,accelyraw);
             accelx = accelxraw * accelscaling;
             accely = accelyraw * accelscaling;
@@ -457,14 +457,14 @@ int main(){
 
                         }
                         if(comdist < comdisttolerance && swipesuccess == 0){
-                                printf("Two finger rotation with an angle of %i degree scaled to %i\n",angleavg,anglescaled);
-                                if(angleavg < 0){
-                                    std::string tmpcommand = commands[16] + std::to_string(anglescaled);
-				    system(tmpcommand.c_str());
-                                }else{
-                                    std::string tmpcommand = commands[17] + std::to_string(anglescaled);
-                                    system(tmpcommand.c_str());
-                                }
+                            printf("Two finger rotation with an angle of %i degree scaled to %i\n",angleavg,anglescaled);
+                            if(angleavg < 0){
+                                std::string tmpcommand = commands[16] + std::to_string(anglescaled);
+                                system(tmpcommand.c_str());
+                            }else{
+                                std::string tmpcommand = commands[17] + std::to_string(anglescaled);
+                                system(tmpcommand.c_str());
+                            }
                         }
                     }
                     else if(nfingers == 3){
