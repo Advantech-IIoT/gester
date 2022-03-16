@@ -112,7 +112,7 @@ int main(){
                 orientation = 3; /* 3 is rotated left*/
                 //printf("Setting orientation to left\n");
             }else{
-                printf("could not find accelerometer data, setting orientation to normal\n");
+                //printf("could not find accelerometer data, setting orientation to normal\n");
                 orientation = 0;
             }
 
