@@ -8,8 +8,8 @@
         std::string xrawdata = "in_accel_x_raw"; // in iio:device* there should be these files with the respective data
         std::string yrawdata = "in_accel_y_raw";
         /*maximum values x and y coordinate can have, usually bottom right of screen and can be found using evtest on the input device*/
-        int xmax = 11747;
-        int ymax = 6607;
+        int xmax = 16383;
+        int ymax = 16383;
         /*minimum length required for something to be a swipe*/
         double swipetolerance = 0.15;
         /*value to scale the angle in degrees for e.g. changing volume*/

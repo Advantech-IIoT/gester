@@ -5,25 +5,9 @@
 
 WORKDIR = `pwd`
 
-CC = gcc
-CXX = g++
-AR = ar
-LD = g++
-
-INC = 
 CFLAGS =  -Wall
-RESINC = 
-LIBDIR = 
-LIB = 
-LDFLAGS = 
 
-INC_RELEASE =  $(INC)
 CFLAGS_RELEASE =  $(CFLAGS) -O2
-RESINC_RELEASE =  $(RESINC)
-RCFLAGS_RELEASE =  $(RCFLAGS)
-LIBDIR_RELEASE =  $(LIBDIR)
-LIB_RELEASE = $(LIB)
-LDFLAGS_RELEASE =  $(LDFLAGS) -s
 OBJDIR_RELEASE = bin/
 OUT_RELEASE = bin/gester
 
@@ -44,10 +28,10 @@ before_release:
 release: before_release out_release
 
 out_release: before_release $(OBJ_RELEASE)
-	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
+	$(CXX) -o $(OUT_RELEASE) $(OBJ_RELEASE)
 
 $(OBJDIR_RELEASE)/main.o: main.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
+	$(CXX) $(CFLAGS_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
 
 clean_release: 
 	rm -rf $(OBJDIR_RELEASE)
