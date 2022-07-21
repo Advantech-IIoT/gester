@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <linux/input.h>
 #include <unistd.h>
@@ -10,6 +12,11 @@
 /*include my own config file in order to separate some variables from this file*/
 #include "config.h"
 
+#define BUFSIZE 256
+
+const char* GET_RESOLUTION_WIDTH_CMD = "wayland-info | grep logical_width | awk -F ' ' '{print $2}' | tr -d ','";
+const char* GET_RESOLUTION_HEIGHT_CMD = "wayland-info | grep logical_height | awk -F ' ' '{print $4}' | tr -d ','";
+
 sig_atomic_t sigusrsig = 0;
 void my_handler(int signum)
 {
@@ -20,10 +27,23 @@ void my_handler(int signum)
     }
 }
 
+static int execute_command(const char *cmd, char *out_buffer, int out_len) {
+	FILE *fp;
+	memset(out_buffer, 0, out_len);
 
+	if ((fp = popen(cmd, "r")) == NULL) {
+		printf("Error opening pipe!\n");
+		return -1;
+	}
+	fgets(out_buffer, out_len, fp);
+	if (pclose(fp)) {
+		printf("Command not found or exited with error status\n");
+		return -1;
+	}
+	return 0;
+}
 
 int main(){
-        printf("Opening device $s",devname);
 		int device = open(devname, O_RDONLY);
         struct input_event ev;
         /*holds information which finger is currently being tracked*/
@@ -69,10 +89,24 @@ int main(){
         std::vector<int> finger4x;
         std::vector<int> finger4y;
 
+        // get screen resolution
+        char buffer[BUFSIZE] = {0};
+        char *pEnd;
+        long int resolution_width = 0, resolution_height = 0;
+        execute_command(GET_RESOLUTION_WIDTH_CMD, buffer, BUFSIZE);
+        resolution_width = strtol(buffer, &pEnd, 10);
+        execute_command(GET_RESOLUTION_HEIGHT_CMD, buffer, BUFSIZE);
+        resolution_height = strtol(buffer, &pEnd, 10);
 
+        double x0last = 0, x1last = 0, x0first = 0, x0len = 0;
+        double y0last = 0, y1last = 0, y0first = 0, y0len = 0;
+        int translation_x = 0, last_translation_x = 0;
+        int translation_y = 0, last_translation_y = 0;
+        char move_cursor_command[BUFSIZE] = {0};
+        char* ydotool_abs_command = "/usr/local/bin/ydotool mousemove --absolute -- %d %d";
 
+        signal(SIGUSR1, my_handler);
         while(1){
-            signal(SIGUSR1, my_handler);
             if(sigusrsig == 1){
                 sigusrsig = 0;
                 // xacceldata.clear();
@@ -304,14 +338,28 @@ int main(){
             }
             //printf("array sizes %i,%i,%i,%i,%i\n",finger0x.size(),finger1x.size(),finger2x.size(),finger3x.size(),finger4x.size());
 
+            // move cursor to touch position
+            if (nfingers == 1 && finger0x.size() > 0 && finger0y.size() > 0){
+                x0last = finger0x[finger0x.size()-1];
+                y0last = finger0y[finger0y.size()-1];
+                translation_x = (int)(x0last / xmax * resolution_width);
+                translation_y = (int)(y0last / ymax * resolution_height);
+                if (translation_x != last_translation_x) {
+                    snprintf(move_cursor_command, sizeof(move_cursor_command) - 1, ydotool_abs_command, translation_x, translation_y);
+                    system(move_cursor_command);
+                }
+                last_translation_x = translation_x;
+                last_translation_y = translation_y;
+            }
+
             if(ev.code == ABS_MT_TRACKING_ID && ev.value == -1){ /* this code+value means that a finger left the screen and I think that is when the gesture should end, not at the last finger.*/
                 /*stuff to calculate per finger*/
-                double x0first = finger0x[0];
-                double x0last = finger0x[finger0x.size()-1];
-                double x0len = ( (x0last - x0first) / xmax );
-                double y0first = finger0y[0];
-                double y0last = finger0y[finger0y.size()-1];
-                double y0len = ( (y0last - y0first) / ymax );
+                x0first = finger0x[0];
+                x0last = finger0x[finger0x.size()-1];
+                x0len = ( (x0last - x0first) / xmax );
+                y0first = finger0y[0];
+                y0last = finger0y[finger0y.size()-1];
+                y0len = ( (y0last - y0first) / ymax );
                 double finger0directionality = abs(x0len / y0len);
                 //printf("directionality: %f\n",fing0directionality);
                 double x1first,x1last,x1len,y1first,y1last,y1len,finger1directionality;

@@ -34,7 +34,7 @@ $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
 
 clean_release: 
-	rm -rf $(OBJDIR_RELEASE)
+	rm -rf $(OBJDIR_RELEASE)/*
 
 .PHONY: before_release clean_release
 
