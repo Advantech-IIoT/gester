@@ -344,7 +344,7 @@ int main(){
                 y0last = finger0y[finger0y.size()-1];
                 translation_x = (int)(x0last / xmax * resolution_width);
                 translation_y = (int)(y0last / ymax * resolution_height);
-                if (translation_x != last_translation_x) {
+                if (translation_x != last_translation_x || translation_y != last_translation_y) {
                     snprintf(move_cursor_command, sizeof(move_cursor_command) - 1, ydotool_abs_command, translation_x, translation_y);
                     system(move_cursor_command);
                 }
