@@ -38,7 +38,7 @@
             "", /*2 finger swipe from right*/
             "", /*2 finger swipe from left*/
             "/usr/bin/start_settings.sh &", /*2 finger swipe down*/
-            "", /*2 finger swipe up*/
+            "ps aux | grep settings | awk '{print $2}' | xargs kill -9", /*2 finger swipe up*/
             "", /*2 finger swipe right*/
             "", /*2 finger swipe left*/
             "", /*2 finger rotation left*/
