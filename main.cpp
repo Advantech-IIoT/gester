@@ -117,8 +117,9 @@ int main(){
             read(device,&ev, sizeof(ev));
                 //if(ev.type == 1 && ev.value == 1){
                 //        printf("Key: %i State: %i\n",ev.code,ev.value);
+            //printf("=== type: %x code: %x  value: %2x\n", ev.type, ev.code, ev.value);
             /*count the number of fingers*/
-            if(ev.code == ABS_MT_TRACKING_ID && ev.value > 0){
+            if(ev.code == ABS_MT_TRACKING_ID && ev.value >= 0){
                 nfingers += 1;
             }
             /*determine which finger's coordinates will be incoming*/
