@@ -351,6 +351,7 @@ int main(){
                 if (translation_x != last_translation_x) {
                     snprintf(move_cursor_command, sizeof(move_cursor_command) - 1, ydotool_abs_command, translation_x, translation_y);
                     system(move_cursor_command);
+                    //printf("=== move_cursor_command=%s\n", move_cursor_command);
                 }
                 last_translation_x = translation_x;
                 last_translation_y = translation_y;

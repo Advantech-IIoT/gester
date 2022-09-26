@@ -33,12 +33,18 @@
             "", /*1 finger towards top*/
             "", /*1 finger towards right*/
             "", /*1 finger towards left*/
-            "ps aux | grep settings | awk '{print $2}' | xargs kill -9", /*2 finger swipe from bottom*/
+            // ref: https://wiki.archlinux.org/title/Weston : Shortcuts
+            // send key KEY_RIGHTMETA (126) + KEY_K (37) => means kill active window
+            // {key_code}:1 => means KEY press, {key_code}:0 => means KEY up
+            "/usr/local/bin/ydotool key 126:1 37:1 37:0 126:0", /*2 finger swipe from bottom*/
+            // start settings tool
             "/usr/bin/start_settings.sh &", /*2 finger swipe from top*/
             "", /*2 finger swipe from right*/
             "", /*2 finger swipe from left*/
+            // start settings tool
             "/usr/bin/start_settings.sh &", /*2 finger swipe down*/
-            "ps aux | grep settings | awk '{print $2}' | xargs kill -9", /*2 finger swipe up*/
+            // send key KEY_RIGHTMETA (126) + KEY_K (37) => means kill active window
+            "/usr/local/bin/ydotool key 126:1 37:1 37:0 126:0", /*2 finger swipe up*/
             "", /*2 finger swipe right*/
             "", /*2 finger swipe left*/
             "", /*2 finger rotation left*/
