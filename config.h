@@ -1,5 +1,7 @@
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
+	// add commands from config file
+	#define CONFIG_PATH "/etc/gester.conf"
         /*path to the input event, need to be part of input group in order to read*/
         char devname[] = "/dev/input/event2";
 	//char devname[] = "/dev/input/event12";

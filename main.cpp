@@ -69,6 +69,29 @@ int main(){
         //     xacceldata.open(xaccelpathfull);
         //     yacceldata.open(yaccelpathfull);
         // }
+#ifdef CONFIG_PATH
+	// Add commands array from config file
+	FILE * fp;
+	char* line = NULL;
+        fp = fopen(CONFIG_PATH, "r");
+        if (fp != NULL)
+        {
+                size_t n = sizeof(commands)/sizeof(char*);
+                for(int i = 0; i < n; i++)
+                {
+                        size_t len = 0, readlen = 0;
+                        if((readlen = getline(&line, &len, fp)) == -1)break;
+                        if(readlen > 0 ){
+                                char *dest = (char*) calloc(readlen, sizeof(char));
+                                strncpy(dest, line, readlen - 1);
+                                commands[i] = dest;
+                        }
+                }
+                fclose(fp);
+                for(int i = 0; i < n; i++)printf("commands[%d]=\"%s\"\n", i, commands[i]);
+
+        }
+#endif
         int accelxraw = 0 ;
         int accelyraw = 0 ;
         double accelx = 0 ;
