@@ -3,8 +3,7 @@
 	// add commands from config file
 	#define CONFIG_PATH "/etc/gester.conf"
         /*path to the input event, need to be part of input group in order to read*/
-        char devname[] = "/dev/input/event2";
-	//char devname[] = "/dev/input/event12";
+        const char *devname = "/dev/input/touchscreen0";
         /*path to accelerometer data*/
         std::string accelpath = "/sys/bus/iio/devices/"; //in there the program looks for a folder named iio:device0 or 1
         std::string xrawdata = "in_accel_x_raw"; // in iio:device* there should be these files with the respective data

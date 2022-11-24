@@ -13,7 +13,7 @@ OUT_RELEASE = bin/gester
 
 DESTDIR = /usr/local/bin/
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/evtest_utility.o
 
 all: release
 
@@ -32,6 +32,9 @@ out_release: before_release $(OBJ_RELEASE)
 
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
+
+$(OBJDIR_RELEASE)/evtest_utility.o: evtest_utility.cpp
+	$(CXX) $(CFLAGS_RELEASE) -c evtest_utility.cpp -o $(OBJDIR_RELEASE)/evtest_utility.o
 
 clean_release: 
 	rm -rf $(OBJDIR_RELEASE)/*

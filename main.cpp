@@ -11,6 +11,7 @@
 
 /*include my own config file in order to separate some variables from this file*/
 #include "config.h"
+#include "evtest_utility.h"
 
 #define BUFSIZE 256
 
@@ -44,6 +45,8 @@ static int execute_command(const char *cmd, char *out_buffer, int out_len) {
 }
 
 int main(){
+        // init touch device value
+        init_touch_device_max(devname, xmax, ymax);
 		int device = open(devname, O_RDONLY);
         struct input_event ev;
         /*holds information which finger is currently being tracked*/
