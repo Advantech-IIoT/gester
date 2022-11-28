@@ -12,6 +12,7 @@
 /*include my own config file in order to separate some variables from this file*/
 #include "config.h"
 #include "evtest_utility.h"
+#include "ini_utility.h"
 
 #define BUFSIZE 256
 
@@ -72,29 +73,73 @@ int main(){
         //     xacceldata.open(xaccelpathfull);
         //     yacceldata.open(yaccelpathfull);
         // }
-#ifdef CONFIG_PATH
-	// Add commands array from config file
-	FILE * fp;
-	char* line = NULL;
-        fp = fopen(CONFIG_PATH, "r");
-        if (fp != NULL)
-        {
-                size_t n = sizeof(commands)/sizeof(char*);
-                for(int i = 0; i < n; i++)
-                {
-                        size_t len = 0, readlen = 0;
-                        if((readlen = getline(&line, &len, fp)) == -1)break;
-                        if(readlen > 0 ){
-                                char *dest = (char*) calloc(readlen, sizeof(char));
-                                strncpy(dest, line, readlen - 1);
-                                commands[i] = dest;
-                        }
-                }
-                fclose(fp);
-                for(int i = 0; i < n; i++)printf("commands[%d]=\"%s\"\n", i, commands[i]);
-
+        if (!is_config_file_exist()) {
+            printf("missing gester config!\n");
+            return -1;
         }
-#endif
+
+        std::string two_finger_gesture_swipe_down_action = get_2_finger_gesture_swipe_down_action();
+        std::string two_finger_gesture_swipe_up_action = get_2_finger_gesture_swipe_up_action();
+        std::string two_finger_gesture_swipe_right_action = get_2_finger_gesture_swipe_right_action();
+        std::string two_finger_gesture_swipe_left_action = get_2_finger_gesture_swipe_left_action();
+        std::string three_finger_gesture_swipe_down_action = get_3_finger_gesture_swipe_down_action();
+        std::string three_finger_gesture_swipe_up_action = get_3_finger_gesture_swipe_up_action();
+        std::string three_finger_gesture_swipe_right_action = get_3_finger_gesture_swipe_right_action();
+        std::string three_finger_gesture_swipe_left_action = get_3_finger_gesture_swipe_left_action();
+        std::string four_finger_gesture_swipe_down_action = get_4_finger_gesture_swipe_down_action();
+        std::string four_finger_gesture_swipe_up_action = get_4_finger_gesture_swipe_up_action();
+        std::string four_finger_gesture_swipe_right_action = get_4_finger_gesture_swipe_right_action();
+        std::string four_finger_gesture_swipe_left_action = get_4_finger_gesture_swipe_left_action();
+        std::string five_finger_gesture_swipe_down_action = get_5_finger_gesture_swipe_down_action();
+        std::string five_finger_gesture_swipe_up_action = get_5_finger_gesture_swipe_up_action();
+        std::string five_finger_gesture_swipe_right_action = get_5_finger_gesture_swipe_right_action();
+        std::string five_finger_gesture_swipe_left_action = get_5_finger_gesture_swipe_left_action();
+        // printf("%s\n%s\n%s\n%s\n", 
+        //     two_finger_gesture_swipe_down_action.c_str(),
+        //     two_finger_gesture_swipe_up_action.c_str(),
+        //     two_finger_gesture_swipe_right_action.c_str(),
+        //     two_finger_gesture_swipe_left_action.c_str());
+        int two_finger_gesture_swipe_up_action_index = 8;
+        int three_finger_gesture_swipe_up_action_index = 18;
+        int four_finger_gesture_swipe_up_action_index = 28;
+        int five_finger_gesture_swipe_up_action_index = 38;
+
+        commands[two_finger_gesture_swipe_up_action_index] = two_finger_gesture_swipe_up_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+5] = two_finger_gesture_swipe_up_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+1] = two_finger_gesture_swipe_down_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+4] = two_finger_gesture_swipe_down_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+2] = two_finger_gesture_swipe_right_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+6] = two_finger_gesture_swipe_right_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+3] = two_finger_gesture_swipe_left_action.data();
+        commands[two_finger_gesture_swipe_up_action_index+7] = two_finger_gesture_swipe_left_action.data();
+
+        commands[three_finger_gesture_swipe_up_action_index] = three_finger_gesture_swipe_up_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+5] = three_finger_gesture_swipe_up_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+1] = three_finger_gesture_swipe_down_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+4] = three_finger_gesture_swipe_down_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+2] = three_finger_gesture_swipe_right_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+6] = three_finger_gesture_swipe_right_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+3] = three_finger_gesture_swipe_left_action.data();
+        commands[three_finger_gesture_swipe_up_action_index+7] = three_finger_gesture_swipe_left_action.data();
+
+        commands[four_finger_gesture_swipe_up_action_index] = four_finger_gesture_swipe_up_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+5] = four_finger_gesture_swipe_up_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+1] = four_finger_gesture_swipe_down_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+4] = four_finger_gesture_swipe_down_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+2] = four_finger_gesture_swipe_right_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+6] = four_finger_gesture_swipe_right_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+3] = four_finger_gesture_swipe_left_action.data();
+        commands[four_finger_gesture_swipe_up_action_index+7] = four_finger_gesture_swipe_left_action.data();
+
+        commands[five_finger_gesture_swipe_up_action_index] = five_finger_gesture_swipe_up_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+5] = five_finger_gesture_swipe_up_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+1] = five_finger_gesture_swipe_down_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+4] = five_finger_gesture_swipe_down_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+2] = five_finger_gesture_swipe_right_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+6] = five_finger_gesture_swipe_right_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+3] = five_finger_gesture_swipe_left_action.data();
+        commands[five_finger_gesture_swipe_up_action_index+7] = five_finger_gesture_swipe_left_action.data();
+
         int accelxraw = 0 ;
         int accelyraw = 0 ;
         double accelx = 0 ;
@@ -129,7 +174,6 @@ int main(){
         int translation_x = 0, last_translation_x = 0;
         int translation_y = 0, last_translation_y = 0;
         char move_cursor_command[BUFSIZE] = {0};
-        char* ydotool_abs_command = "/usr/local/bin/ydotool mousemove --absolute -- %d %d";
 
         signal(SIGUSR1, my_handler);
         while(1){

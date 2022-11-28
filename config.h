@@ -1,7 +1,5 @@
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
-	// add commands from config file
-	#define CONFIG_PATH "/etc/gester.conf"
         /*path to the input event, need to be part of input group in order to read*/
         const char *devname = "/dev/input/touchscreen0";
         /*path to accelerometer data*/
@@ -24,6 +22,7 @@
         int offsettop = 10;
         int offsetleft = 10;
         int offsetright = 10;
+        const char* ydotool_abs_command = "/usr/local/bin/ydotool mousemove --absolute -- %d %d";
         /*an array of commands to use within the program*/
         char* commands[] = {
             "", /*1 finger from bottom*/

@@ -5,22 +5,25 @@
 
 WORKDIR = `pwd`
 
-CFLAGS =  -Wall
+CFLAGS =  -Wall -std=c++17
 
 CFLAGS_RELEASE =  $(CFLAGS) -O2
 OBJDIR_RELEASE = bin/
 OUT_RELEASE = bin/gester
 
-DESTDIR = /usr/local/bin/
+DEST_BINDIR = /usr/local/bin/
+DEST_CONFDIR = /etc/gester/
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/evtest_utility.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/evtest_utility.o $(OBJDIR_RELEASE)/ini_utility.o
 
 all: release
 
 clean: clean_release
 
 install:
-	cp $(OUT_RELEASE) $(DESTDIR) 
+	mkdir -p $(DEST_CONFDIR)
+	cp gester.conf $(DEST_CONFDIR)
+	cp $(OUT_RELEASE) $(DEST_BINDIR) 
 
 before_release: 
 	test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
@@ -35,6 +38,9 @@ $(OBJDIR_RELEASE)/main.o: main.cpp
 
 $(OBJDIR_RELEASE)/evtest_utility.o: evtest_utility.cpp
 	$(CXX) $(CFLAGS_RELEASE) -c evtest_utility.cpp -o $(OBJDIR_RELEASE)/evtest_utility.o
+
+$(OBJDIR_RELEASE)/ini_utility.o: ini_utility.cpp
+	$(CXX) $(CFLAGS_RELEASE) -c ini_utility.cpp -o $(OBJDIR_RELEASE)/ini_utility.o
 
 clean_release: 
 	rm -rf $(OBJDIR_RELEASE)/*
