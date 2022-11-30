@@ -48,6 +48,7 @@ static int execute_command(const char *cmd, char *out_buffer, int out_len) {
 int main(){
         // init touch device value
         init_touch_device_max(devname, xmax, ymax);
+        bool isHideCursor = get_hide_cursor();
 		int device = open(devname, O_RDONLY);
         struct input_event ev;
         /*holds information which finger is currently being tracked*/
@@ -410,7 +411,7 @@ int main(){
             //printf("array sizes %i,%i,%i,%i,%i\n",finger0x.size(),finger1x.size(),finger2x.size(),finger3x.size(),finger4x.size());
 
             // move cursor to touch position
-            if (nfingers == 1 && finger0x.size() > 0 && finger0y.size() > 0){
+            if (nfingers == 1 && finger0x.size() > 0 && finger0y.size() > 0 && !isHideCursor){
                 x0last = finger0x[finger0x.size()-1];
                 y0last = finger0y[finger0y.size()-1];
                 translation_x = (int)(x0last / xmax * resolution_width);

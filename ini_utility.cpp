@@ -5,8 +5,8 @@
 
 #include "ini_utility.h"
 
-// commands from config file
-const char* CONFIG_PATH = "/etc/gester/gester.conf";
+// gester related
+const char* GESTER_CONFIG_PATH = "/etc/gester/gester.conf";
 
 const char* TWO_FINGER_GESTURE_SECTION =   "2_finger_gesture";
 const char* THREE_FINGER_GESTURE_SECTION = "3_finger_gesture";
@@ -19,10 +19,16 @@ const char* KEY_GESTURE_SWIPE_LEFT =  "swipe_left";
 const char* GESTURE_ACTION_SECTION =  "gesture_action";
 const char* GET_INI_VALUE_CMD =       "/usr/local/bin/qtini -f %s -a read -s %s -k %s";
 
+// weston related
+const char* WESTON_CONFIG_FILE = "/etc/xdg/weston/weston.ini";
+
+const char *WESTON_SECTION_LIBINPUT = "libinput";
+const char *KEY_HIDE_CURSOR = "hide-cursor";
+
 using namespace std;
 
 static string _get_gesture_action_cmd(const char *finger_gesture, const char *gesture_key) {
-    const auto retAction = execute_cmd_get_single_info(GET_INI_VALUE_CMD, CONFIG_PATH, finger_gesture, gesture_key);
+    const auto retAction = execute_cmd_get_single_info(GET_INI_VALUE_CMD, GESTER_CONFIG_PATH, finger_gesture, gesture_key);
     if (!retAction.second) {
         printf("Failed to get %s:%s\n", finger_gesture, gesture_key);
         return retAction.first;
@@ -30,13 +36,17 @@ static string _get_gesture_action_cmd(const char *finger_gesture, const char *ge
     if (retAction.first.empty()) {
         return retAction.first;
     }
-    const auto ret = execute_cmd_get_single_info(GET_INI_VALUE_CMD, CONFIG_PATH, GESTURE_ACTION_SECTION, retAction.first.c_str());
+    const auto ret = execute_cmd_get_single_info(GET_INI_VALUE_CMD, GESTER_CONFIG_PATH, GESTURE_ACTION_SECTION, retAction.first.c_str());
     if (!ret.second) {
         printf("Failed to get %s:%s\n", GESTURE_ACTION_SECTION, retAction.first.c_str());
     }
     return ret.first;
 }
 
+bool is_config_file_exist()
+{
+    return is_file_exist(GESTER_CONFIG_PATH);
+}
 string get_2_finger_gesture_swipe_down_action() {
     return _get_gesture_action_cmd(TWO_FINGER_GESTURE_SECTION, KEY_GESTURE_SWIPE_DOWN);
 }
@@ -86,6 +96,16 @@ string get_5_finger_gesture_swipe_left_action() {
     return _get_gesture_action_cmd(FIVE_FINGER_GESTURE_SECTION, KEY_GESTURE_SWIPE_LEFT);
 }
 
+bool get_hide_cursor()
+{
+    bool hideCursor = false;
+    if (!is_file_exist(WESTON_CONFIG_FILE))
+        return hideCursor;
+    const auto ret = execute_cmd_get_single_info(GET_INI_VALUE_CMD, WESTON_CONFIG_FILE, WESTON_SECTION_LIBINPUT, KEY_HIDE_CURSOR);
+    hideCursor = (ret.first.compare(0, strlen(STRING_BOOL_TRUE), STRING_BOOL_TRUE) == 0);
+    return hideCursor;
+}
+
 pair<string, int> execute_cmd(const char *cmd)
 {
     array<char, 256> buffer;
@@ -126,9 +146,9 @@ pair<string, bool> execute_cmd_get_single_info(const char *cmd, ...)
     return make_pair(ret.first, result);
 }
 
-bool is_config_file_exist()
+bool is_file_exist(const char *path)
 {
-    if (access(CONFIG_PATH, F_OK) == 0) {
+    if (access(path, F_OK) == 0) {
         return true;
     } else {
         return false;
