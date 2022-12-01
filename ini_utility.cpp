@@ -17,7 +17,7 @@ const char* KEY_GESTURE_SWIPE_UP =    "swipe_up";
 const char* KEY_GESTURE_SWIPE_RIGHT = "swipe_right";
 const char* KEY_GESTURE_SWIPE_LEFT =  "swipe_left";
 const char* GESTURE_ACTION_SECTION =  "gesture_action";
-const char* GET_INI_VALUE_CMD =       "/usr/local/bin/qtini -f %s -a read -s %s -k %s";
+const char* GET_INI_VALUE_CMD =       "/usr/local/bin/atcc.ini -f %s -a read -s %s -k %s";
 
 // weston related
 const char* WESTON_CONFIG_FILE = "/etc/xdg/weston/weston.ini";
