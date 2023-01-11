@@ -38,12 +38,12 @@
             // {key_code}:1 => means KEY press, {key_code}:0 => means KEY up
             "/usr/local/bin/ydotool key 126:1 37:1 37:0 126:0", /*2 finger swipe from bottom*/
             // start settings tool
-            "/usr/bin/start_settings.sh &", /*2 finger swipe from top*/
+            "/usr/bin/systemd-run --scope --user /usr/bin/start_settings.sh &", /*2 finger swipe from top*/
             // send key KEY_RIGHTMETA (126) + KEY_TAB (15) => means switch window
             "/usr/local/bin/ydotool key 126:1 15:1 15:0 126:0", /*2 finger swipe from right*/
             "", /*2 finger swipe from left*/
             // start settings tool
-            "/usr/bin/start_settings.sh &", /*2 finger swipe down*/
+            "/usr/bin/systemd-run --scope --user /usr/bin/start_settings.sh &", /*2 finger swipe down*/
             // send key KEY_RIGHTMETA (126) + KEY_K (37) => means kill active window
             "/usr/local/bin/ydotool key 126:1 37:1 37:0 126:0", /*2 finger swipe up*/
             // send key KEY_RIGHTMETA (126) + KEY_TAB (15) => means switch window
