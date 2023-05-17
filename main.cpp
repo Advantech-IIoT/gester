@@ -160,6 +160,9 @@ int main(){
         std::vector<int> finger3y;
         std::vector<int> finger4x;
         std::vector<int> finger4y;
+        // cursor
+        std::vector<int> cursorX;
+        std::vector<int> cursorY;
 
         // get screen resolution
         char buffer[BUFSIZE] = {0};
@@ -169,6 +172,17 @@ int main(){
         resolution_width = strtol(buffer, &pEnd, 10);
         execute_command(GET_RESOLUTION_HEIGHT_CMD, buffer, BUFSIZE);
         resolution_height = strtol(buffer, &pEnd, 10);
+        std::string rotateScreen = get_rotate_screen();
+        if (rotateScreen.compare(STRING_ROTATE_NINETY) == 0) {
+            orientation = 1;
+        } else if (rotateScreen.compare(STRING_ROTATE_ONE_EIGHTY) == 0) {
+            orientation = 2;
+        } else if (rotateScreen.compare(STRING_ROTATE_TWO_SEVENTY) == 0) {
+            orientation = 3;
+        } else {
+            orientation = 0;
+        }
+        //printf("rotateScreen: %s orientation: %d\n", rotateScreen.c_str(), orientation);
 
         double x0last = 0, x1last = 0, x0first = 0, x0len = 0;
         double y0last = 0, y1last = 0, y0first = 0, y0len = 0;
@@ -197,31 +211,16 @@ int main(){
             if(ev.code == ABS_MT_SLOT){
                 finger = ev.value;
             }
-            /*here we need to read the accelerometers and then assign data to the arrays according to the orientation*/
-            // xacceldata >> accelxraw;
-            // yacceldata >> accelyraw;
-            //printf("accelxraw: %i accelyraw: %i ",accelxraw,accelyraw);
-            accelx = accelxraw * accelscaling;
-            accely = accelyraw * accelscaling;
-            //printf("accelx: %f accely: %f\n",accelx,accely);
 
-            if(accelx < gthresh && accely < -gthresh){
-                orientation = 0; /* 0 is normal orientation */
-                //printf("Setting orientation to normal\n");
-            }else if(accelx > gthresh && accely < gthresh){
-                orientation = 1; /* 1 is rotated right*/
-                //printf("Setting orientation to right\n");
-            }else if (accelx < gthresh && accely > gthresh){
-                orientation = 2; /* 2 is upside down*/
-                //printf("Setting orientation to upside down\n");
-            }else if (accelx < -gthresh && accely < gthresh){
-                orientation = 3; /* 3 is rotated left*/
-                //printf("Setting orientation to left\n");
-            }else{
-                //printf("could not find accelerometer data, setting orientation to normal\n");
-                orientation = 0;
+            // cursor do not care orientation
+            if (finger == 0){
+                if(ev.code == ABS_MT_POSITION_X){
+                    cursorX.push_back(ev.value);
+                }
+                if(ev.code == ABS_MT_POSITION_Y){
+                    cursorY.push_back(ev.value);
+                }
             }
-
             /*actually put the data into the arrays*/
             if(orientation == 0){
                 //printf("normal orientation\n");
@@ -411,9 +410,9 @@ int main(){
             //printf("array sizes %i,%i,%i,%i,%i\n",finger0x.size(),finger1x.size(),finger2x.size(),finger3x.size(),finger4x.size());
 
             // move cursor to touch position
-            if (nfingers == 1 && finger0x.size() > 0 && finger0y.size() > 0 && !isHideCursor){
-                x0last = finger0x[finger0x.size()-1];
-                y0last = finger0y[finger0y.size()-1];
+            if (nfingers == 1 && cursorX.size() > 0 && cursorY.size() > 0 && !isHideCursor){
+                x0last = cursorX[cursorX.size()-1];
+                y0last = cursorY[cursorY.size()-1];
                 translation_x = (int)(x0last / xmax * resolution_width);
                 translation_y = (int)(y0last / ymax * resolution_height);
                 // NOTE: using x || y changed would produce too many commands
@@ -846,6 +845,8 @@ int main(){
                 finger3y.clear();
                 finger4x.clear();
                 finger4y.clear();
+                cursorX.clear();
+                cursorY.clear();
 
                 x0first = 0;
                 x0last = 0;

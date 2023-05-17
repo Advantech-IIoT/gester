@@ -25,6 +25,9 @@ const char* WESTON_CONFIG_FILE = "/etc/xdg/weston/weston.ini";
 const char *WESTON_SECTION_LIBINPUT = "libinput";
 const char *KEY_HIDE_CURSOR = "hide-cursor";
 
+const char *WESTON_SECTION_OUTPUT = "output";
+const char *KEY_TRANSFORM = "transform";
+
 using namespace std;
 
 static string _get_gesture_action_cmd(const char *finger_gesture, const char *gesture_key) {
@@ -104,6 +107,15 @@ bool get_hide_cursor()
     const auto ret = execute_cmd_get_single_info(GET_INI_VALUE_CMD, WESTON_CONFIG_FILE, WESTON_SECTION_LIBINPUT, KEY_HIDE_CURSOR);
     hideCursor = (ret.first.compare(0, strlen(STRING_BOOL_TRUE), STRING_BOOL_TRUE) == 0);
     return hideCursor;
+}
+
+string get_rotate_screen()
+{
+    string empty;
+    if (!is_file_exist(WESTON_CONFIG_FILE))
+        return empty;
+    const auto ret = execute_cmd_get_single_info(GET_INI_VALUE_CMD, WESTON_CONFIG_FILE, WESTON_SECTION_OUTPUT, KEY_TRANSFORM);
+    return ret.first;
 }
 
 pair<string, int> execute_cmd(const char *cmd)
